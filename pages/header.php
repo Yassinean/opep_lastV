@@ -21,6 +21,8 @@ session_start();
             </a>
             <ul>
                 <li><a href="index.php">Home</a></li>
+                <li><a href="./blog.php">Blog</a></li>
+                <li><a href="./article.php">Article</a></li>
 
             </ul>
         </nav>

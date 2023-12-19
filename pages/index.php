@@ -113,12 +113,6 @@ if (!$_SESSION['client']) {
                 }
                 ?>
                 <button name="choose" class="button">filter</button>
-                <?php
-                echo "<pre>";
-                print_r($_SESSION);
-                echo "</pre>";
-
-                ?>
             </form>
         </div>
         <div class="main x">

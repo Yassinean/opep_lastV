@@ -5,7 +5,12 @@ if (isset($_POST['tag']) && isset($_POST['idtheme'])) {
     $tag = $_POST['tag'];
     $idtheme = $_POST['idtheme'];
 
-    $sql = "SELECT DISTINCT(article.titreArticle),article.*, theme.* from article JOIN articletag JOIN tag JOIN theme WHERE articletag.ArticleID = article.idArticle AND articletag.tagID = tag.idTag AND tag.themeID = theme.idTheme AND theme.idTheme = $idtheme AND tag.name = '$tag'";
+    $sql = "SELECT DISTINCT(article.titreArticle),article.*, theme.* 
+    from article 
+    JOIN articletag 
+    JOIN tag 
+    JOIN theme
+    WHERE articletag.ArticleID = article.idArticle AND articletag.tagID = tag.idTag AND tag.themeID = theme.idTheme AND theme.idTheme = $idtheme AND tag.name = '$tag'";
     $req = mysqli_query($conn, $sql);
 
     // Output filtered results

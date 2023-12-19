@@ -274,21 +274,3 @@ select.choix {
 .cart-shopping {
     cursor: pointer;
 }
-
-
-  $sql ='DELETE FROM panierplante WHERE idPivot =' . $idPivot . ';';
-
-  $sql ='UPDATE panierplante SET status = 0 WHERE  idPivot  = ? ';
-  $stmt =mysqli_stmt_init($conn);
-
-  if ( !mysqli_stmt_prepare($stmt, $sql)) {
-      header("Location: ../pages/cart.php?error=sqlerror");
-      exit();
-  }
-
-  else {
-      mysqli_stmt_bind_param($stmt, "i", $idPivot);
-      mysqli_stmt_execute($stmt);
-      header("Location: ../pages/cart.php?success=updated");
-      exit();
-  }

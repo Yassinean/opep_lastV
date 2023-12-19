@@ -591,20 +591,12 @@ Media Queries
 
 include '../includes/dbh.inc.php';
 
-
-
-
-
 // change this later with the id from GET OR POST
 $req = "SELECT ar.*, ut.nom FROM article AS ar LEFT JOIN utilisateur AS ut ON ar.userID = ut.idUser WHERE  ar.idArticle = $idArticle  ;";
 $sql = mysqli_query($conn, $req);
 $row = mysqli_fetch_assoc($sql);
 
 ?>
-
-
-
-
 <body>
     <nav class="md:container md:mx-auto flex justify-between items-center w-full m-auto bg-green-700">
         <img class="w-20" src="../images/logo.webp" alt="">

@@ -25,7 +25,7 @@ if (isset($_POST["tag"]) && isset($_POST["idtheme"]) && isset($_POST["stratPage"
 
         if (str_word_count($row[2]) <= 5) {
             $output .= $row[2];
-        } else {
+            } else {
             $pieces = explode(" ", $row[2]);
             for ($i = 0; $i < 5; $i++) {
                 $output .= $pieces[$i] . ' ';

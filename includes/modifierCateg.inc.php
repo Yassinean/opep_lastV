@@ -9,7 +9,7 @@ if (isset($_POST['editCateg'])) {
         header("Location: ../pages/modifierCateg.php?error=emptyFields");
         exit();
     } else {
-        $sql = 'UPDATE categorie SET nomCateorie = ? WHERE  idCategorie  = ? ';
+        $sql = 'UPDATE categorie SET nomCategorie = ? WHERE  idCategorie  = ? ';
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
             header("Location: ../pages/dashboard.php?error=sqlerror");

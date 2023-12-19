@@ -97,7 +97,7 @@ session_start();
         WHERE panierplante.plante_id = plante.idPlante 
         AND panierplante.panier_id = panier.idPanier 
         AND panier.idUser = $idUser 
-        AND panierplante.status = 1;";
+        AND panierplante.status = $idPanier;";
 
     $request = mysqli_query($conn, $sql);
  

@@ -1,5 +1,8 @@
 <?php
 require "../includes/dbh.inc.php";
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 session_start();
 if (!empty($_SESSION['userid'])) {
     $userid = $_SESSION['userid'];
@@ -14,7 +17,13 @@ $idtheme = $_GET['id'];
 
 $num_par_page = 6;
 
-$sql = "SELECT DISTINCT(article.titreArticle),article.*, theme.* from article JOIN articletag JOIN tag JOIN theme WHERE articletag.ArticleID = article.idArticle AND articletag.tagID = tag.idTag AND tag.themeID = theme.idTheme AND theme.idTheme = $idtheme";
+$sql = "SELECT DISTINCT(article.titreArticle),article.*, theme.* 
+        from article 
+        JOIN articletag JOIN tag 
+        JOIN theme WHERE articletag.ArticleID = article.idArticle
+        AND articletag.tagID = tag.idTag 
+        AND tag.themeID = theme.idTheme 
+        AND theme.idTheme = $idtheme";
 $req = mysqli_query($conn, $sql);
 
 $num_article = mysqli_num_rows($req);
@@ -29,8 +38,18 @@ if (!isset($_GET['page'])) {
 
 $contenu_premier_page = ($page - 1) * $num_par_page;
 
-$sql1 = "SELECT DISTINCT(article.titreArticle),article.*, theme.* from article JOIN articletag JOIN tag JOIN theme WHERE articletag.ArticleID = article.idArticle AND articletag.tagID = tag.idTag AND tag.themeID = theme.idTheme AND theme.idTheme = $idtheme LIMIT $contenu_premier_page, $num_par_page";
-$req1 = mysqli_query($conn, $sql1);
+$sqlPag = "SELECT DISTINCT(article.titreArticle),article.*, theme.* 
+           FROM article 
+           JOIN articletag ON articletag.ArticleID = article.idArticle 
+           JOIN tag ON articletag.tagID = tag.idTag 
+           JOIN theme ON tag.themeID = theme.idTheme 
+           WHERE theme.idTheme = $idtheme 
+           LIMIT $contenu_premier_page, $num_par_page";
+
+$reqPag = mysqli_query($conn, $sqlPag);
+if ($reqPag === false) {
+    die("Error: " . mysqli_error($conn));
+}
 ?>
 
 <!DOCTYPE html>
@@ -85,16 +104,6 @@ $req1 = mysqli_query($conn, $sql1);
                             </div>
                             <h1 class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-4xl ">Ajouter un article</h1>
 
-                            <?php
-                            // $getID = "";
-                            // $ToGetId = mysqli_query($conn, $getID);
-
-                            // while ($row = mysqli_fetch_row($ToGetId)) {
-                            ?>
-
-                            <?php
-                            // }
-                            ?>
                             <form class="max-w-sm mx-auto" method="post" action="./article.php?id=<?php echo $idtheme; ?>" enctype="multipart/form-data">
                                 <div class="mb-5">
                                     <label for="titre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</label>
@@ -110,7 +119,7 @@ $req1 = mysqli_query($conn, $sql1);
                                 </div>
                                 <div class="mb-5 grid grid-cols-1 md:grid-cols-2 gap-4  m-auto ">
                                     <?php
-                                    $sql2 = "select * from tag where themeID = $idtheme";
+                                    $sql2 = "SELECT * from tag where themeID = $idtheme";
                                     $req2 = mysqli_query($conn, $sql2);
 
                                     while ($tag_forA = mysqli_fetch_row($req2)) {
@@ -148,13 +157,12 @@ $req1 = mysqli_query($conn, $sql1);
                                         $sql2 = "INSERT INTO articletag VALUES(NULL,'$tag','$lastInsertedID')";
                                         $req2 = mysqli_query($conn, $sql2);
                                     }
-                                    header('Location: http://www.google.com/');
+                                    
                                 }
                                 ?>
                             </form>
                         </div>
                         <script src="main.js"></script>
-                        <h1 class="mx-2 mb-2 text-sm font-medium text-gray-900 dark:text-white">Bonjour cher client</h1>
                     </div>
                 </nav>
                 <div class=' my-5  h-3/4 text-center   '>
@@ -178,10 +186,12 @@ $req1 = mysqli_query($conn, $sql1);
                     </div>
 
                     <!-- ======================Search form================================== -->
-
-                    <div id="resultat" class="grid grid-cols-1 md:grid-cols-3 gap-4 w-4/5 m-auto my-5 ">
+                    <div id="resultat"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-4/5 m-auto my-5">
                         <?php
-                        while ($row = mysqli_fetch_row($req1)) {
+
+                        while ($row = mysqli_fetch_row($req)) {
+
                         ?>
                             <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col justify-center items-center p-4">
                                 <a href="#">
@@ -227,7 +237,7 @@ $req1 = mysqli_query($conn, $sql1);
                     </div>
                     <?php
                     echo '<div id="tag-container" class="flex flex-col justify-center items-center w-4/5 m-auto">';
-                    $sql2 = "select * from tag where themeID = $idtheme";
+                    $sql2 = "SELECT * from tag where themeID = $idtheme";
                     $req2 = mysqli_query($conn, $sql2);
                     while ($tag = mysqli_fetch_row($req2)) {
                         echo '<button value="' . $tag['1'] . '" id="tags" class="w-full text-gray-900 bg-white border border-gray-300  hover:bg-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2" ">' . $tag['1'] . '</button>
@@ -235,26 +245,16 @@ $req1 = mysqli_query($conn, $sql1);
                     }
                     echo '</div>';
                     ?>
-                    <!--<div class=" flex flex-col justify-center items-center w-4/5 m-auto">
-                        <?php /*
-                        $sql2 = "select * from tag where themeID = $idtheme";
-                        $req2 = mysqli_query($conn, $sql2);
-                        while ($tag = mysqli_fetch_row($req2)) {
-                            echo '<a class="w-full text-gray-900 bg-white border border-gray-300  hover:bg-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2" href="article.php?id=' . $idtheme . '&tag=' . $tag['1'] . '">' . $tag['1'] . '</a>';
-                        ?>
-                            <!-- <button type="button" class="w-full text-gray-900 bg-white border border-gray-300  hover:bg-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 "><?php //echo $tag['1'] ?></button> -->
-                        <?php
-                        }*/
-                        ?>
-                    </div>-->
                 </div>
             </div>
         </div>
-        <?php
-        for ($page = 1; $page <= $num_pages; $page++) {
-            echo '<a class="h-10 px-5 text-green-600 transition-colors duration-150 rounded-l-lg focus:shadow-outline hover:bg-green-100" href="article.php?id=' . $idtheme . '&page=' . $page . '">' . $page . '</a> ';
-        }
-        ?>
+        <div class="flex justify-center">
+            <?php
+            for ($page = 1; $page <= $num_pages; $page++) {
+                echo '<a class="justify-center h-10 px-5 text-green-600 transition-colors duration-150 rounded-l-lg focus:shadow-outline hover:bg-green-100" href="article.php?id=' . $idtheme . '&page=' . $page . '">' . $page . '</a> ';
+            }
+            ?>
+        </div>
     </header>
     <main>
     </main>
@@ -319,7 +319,7 @@ $req1 = mysqli_query($conn, $sql1);
                 $("#resultat").html("");
 
                 $.ajax({
-                    url: "cardArticles.php", // Create a new PHP file to handle the AJAX request
+                    url: "cardArticles.php",
                     method: "POST",
                     data: {
                         tag: tag,

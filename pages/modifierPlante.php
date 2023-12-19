@@ -205,7 +205,7 @@ $id = @$_GET['id'];
                         <h1>modifier plante</h1> <br>
                         <form class="form" action="../includes/modifierPlalnte.inc.php" method="post" id="editForm" enctype="multipart/form-data">
                             <?php
-                            $sql = "SELECT plante.*, categorie.nomCateorie FROM plante JOIN categorie ON plante.idCategorie = categorie.idCategorie WHERE plante.idPlante = '$id';";
+                            $sql = "SELECT plante.*, categorie.nomCategorie FROM plante JOIN categorie ON plante.idCategorie = categorie.idCategorie WHERE plante.idPlante = '$id';";
                             $request = mysqli_query($conn, $sql);
 
                             while ($row = mysqli_fetch_assoc($request)) {

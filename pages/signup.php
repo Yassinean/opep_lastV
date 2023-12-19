@@ -1,5 +1,13 @@
 <?php
 require "header.php";
+if(isset($_POST['signup-submit'])){
+    $uid = $_POST['uid'];
+    $email = $_POST['email'];
+    $pass = $_POST['password'];
+    $pass_confirm = $_POST['password-repeat'];
+
+    // $testObjet
+}
 ?>
 <main class="signup-form">
 
